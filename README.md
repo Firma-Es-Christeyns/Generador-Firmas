@@ -8,8 +8,6 @@ Este proyecto contiene una herramienta web estática para que los empleados de C
 
 **URL:** `https://TU_USUARIO_DE_GITHUB.github.io/NOMBRE_DE_TU_REPOSITORIO/`
 
-*(Nota: Reemplaza la URL de arriba con el enlace real de tu GitHub Pages una vez publicado).*
-
 ---
 
 ## 📖 ¿Cómo Usar? (Para Empleados)
@@ -26,8 +24,6 @@ Este proyecto contiene una herramienta web estática para que los empleados de C
 ---
 
 ## 🔧 ¿Cómo Actualizar el Banner? (Para Marketing / IT)
-
-El banner promocional de la firma se puede actualizar sin necesidad de tocar el código. La persona encargada solo necesita tener permisos de colaborador en este repositorio de GitHub.
 
 #### **Requisito INDISPENSABLE:**
 
