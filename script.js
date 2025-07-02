@@ -1,4 +1,4 @@
-// Fichero: script.js (Versión con mejoras de feedback y formato)
+// Fichero: script.js (Versión con copiado a prueba de fallos para Android)
 
 document.addEventListener('DOMContentLoaded', function() {
 
@@ -9,8 +9,6 @@ document.addEventListener('DOMContentLoaded', function() {
         'Madrid': { address: 'Avenida Mediterraneo, 11, 28007 (Madrid)', phone: '+34 902 636 273' },
         'Vic': { address: 'Carrer de Figueres, 16, 08500 Vic, (Barcelona)', phone: '+34 938 869 733' }
     };
-    
-    // NOTA: La variable "bannerLinks" ahora viene del fichero "datos_banners.js"
 
     // --- Elementos del DOM ---
     const generarBtn = document.getElementById('generar-btn');
@@ -54,7 +52,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function updateSignature() {
         const nombreVal = toTitleCase(formInputs.nombre.value.trim());
-        // ✅ MEJORA: Aplicado el formato también al cargo
         const cargoVal = toTitleCase(formInputs.cargo.value.trim());
         const tefVal = formInputs.tef.value.trim();
         const sedeVal = formInputs.sede.value;
@@ -88,37 +85,28 @@ document.addEventListener('DOMContentLoaded', function() {
                 bannerFilename = `banner_actual_${linkKey}.png`;
             }
             
-            signatureOutputs.banner.src = `https://raw.githubusercontent.com/Firma-Es-Christeyns/Generador-Firmas/main/img/banner/${bannerFilename}`;
-            const defaultUrl = bannerLinks['general'] || 'https://www.christeyns.com/es-es/';
-            signatureOutputs.bannerLink.href = bannerLinks[linkKey] || defaultUrl;
+            if (typeof bannerLinks !== 'undefined' && bannerLinks) {
+                signatureOutputs.banner.src = `https://raw.githubusercontent.com/Firma-Es-Christeyns/Generador-Firmas/main/img/banner/${bannerFilename}`;
+                const defaultUrl = bannerLinks['general'] || 'https://www.christeyns.com/es-es/';
+                signatureOutputs.bannerLink.href = bannerLinks[linkKey] || defaultUrl;
+            }
         }
     }
     
-    function fallbackCopyHTML(elementToCopy) {
+    function selectText(element) {
         const range = document.createRange();
-        range.selectNode(elementToCopy);
+        range.selectNode(element);
         window.getSelection().removeAllRanges();
         window.getSelection().addRange(range);
-        
-        let success = false;
-        try {
-            success = document.execCommand('copy');
-        } catch (err) {
-            console.error('Fallback copy failed', err);
-        }
-    
-        window.getSelection().removeAllRanges();
-        return success;
     }
 
-    // ✅ MEJORA: Función centralizada para mostrar el feedback del botón copiado
-    function showCopiedFeedback() {
-        copyBtn.textContent = '¡Copiado!';
-        copyBtn.classList.add('copied'); // Añade la clase para el fondo verde
+    function showFeedback(message, duration = 3000) {
+        copyBtn.textContent = message;
+        copyBtn.classList.add('copied');
         setTimeout(() => {
             copyBtn.textContent = 'Copiar Firma';
-            copyBtn.classList.remove('copied'); // Quita la clase del fondo verde
-        }, 5000); // El botón se mantiene así durante 5 segundos
+            copyBtn.classList.remove('copied');
+        }, duration);
     }
 
     // --- Event Listeners ---
@@ -132,7 +120,6 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
         
-        // ✅ MEJORA: Listener para formatear el cargo en tiempo real
         if (formInputs.cargo) {
             formInputs.cargo.addEventListener('input', function(e) {
                 const start = e.target.selectionStart;
@@ -175,26 +162,37 @@ document.addEventListener('DOMContentLoaded', function() {
         copyBtn.addEventListener('click', function() {
             if (copyBtn.disabled) return;
             
+            // Intento 1: API Moderna
             if (navigator.clipboard && navigator.clipboard.write) {
                 const firmaHTML = firmaContainer.innerHTML;
                 const blob = new Blob([firmaHTML], { type: 'text/html' });
                 const clipboardItem = new ClipboardItem({ 'text/html': blob });
 
                 navigator.clipboard.write([clipboardItem]).then(() => {
-                    showCopiedFeedback();
+                    showFeedback('¡Copiado!');
                 }).catch(err => {
-                    if (fallbackCopyHTML(firmaContainer)) {
-                        showCopiedFeedback();
+                    // Intento 2: Comando Clásico
+                    selectText(firmaContainer);
+                    if (document.execCommand('copy')) {
+                        showFeedback('¡Copiado!');
                     } else {
-                        alert('Error al copiar. Por favor, selecciona la firma manualmente y cópiala.');
+                        // Intento 3: Failsafe (Seleccionar para el usuario)
+                        selectText(firmaContainer);
+                        showFeedback('¡Seleccionado! Cópialo manualmente');
                     }
+                    window.getSelection().removeAllRanges();
                 });
             } else {
-                if (fallbackCopyHTML(firmaContainer)) {
-                    showCopiedFeedback();
-                } else {
-                    alert('Error al copiar. Por favor, selecciona la firma manualmente y cópiala.');
-                }
+                 // Intento 2 (para navegadores muy antiguos)
+                 selectText(firmaContainer);
+                 if (document.execCommand('copy')) {
+                     showFeedback('¡Copiado!');
+                 } else {
+                     // Intento 3: Failsafe (Seleccionar para el usuario)
+                     selectText(firmaContainer);
+                     showFeedback('¡Seleccionado! Cópialo manualmente');
+                 }
+                 window.getSelection().removeAllRanges();
             }
         });
     }
