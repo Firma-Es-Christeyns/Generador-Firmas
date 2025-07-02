@@ -12,7 +12,7 @@ Este proyecto es una herramienta web interna diseñada para que los empleados de
   - **Escritorio/Web:** Una firma completa con todos los elementos gráficos, incluyendo logo y banners promocionales.
   - **Móvil:** Una versión simplificada y más ligera, optimizada para dispositivos móviles.
 - **Formulario Intuitivo:** Los usuarios solo tienen que rellenar sus datos (nombre, cargo, sede) para generar la firma.
-- **Capitalización Automática:** El campo de "Nombre y apellidos" formatea el texto automáticamente para asegurar que cada palabra empiece con mayúscula.
+- **Capitalización Automática:** Los campos **"Nombre y apellidos" y "Cargo"** formatean el texto automáticamente para asegurar que cada palabra empiece con mayúscula.
 - **Gestión de Banners Dinámica:** El banner promocional es dinámico y cambia según la "División" seleccionada por el usuario. Los enlaces de cada banner se gestionan de forma centralizada.
 - **Copia Fácil:** Un botón "Copiar Firma" permite copiar el HTML de la firma directamente al portapapeles para pegarlo en la configuración de Outlook.
 
