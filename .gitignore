@@ -1,0 +1,10 @@
+# Ficheros del sistema operativo
+.DS_Store
+Thumbs.db
+
+# Ficheros de configuración de editores
+.vscode/
+.idea/
+
+# Logs
+*.log
