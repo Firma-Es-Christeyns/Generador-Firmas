@@ -1,4 +1,4 @@
-// Fichero: script.js (Versión Final con Auto-Mayúsculas)
+// Fichero: script.js (Versión con mejoras de feedback y formato)
 
 document.addEventListener('DOMContentLoaded', function() {
 
@@ -10,8 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
         'Vic': { address: 'Carrer de Figueres, 16, 08500 Vic, (Barcelona)', phone: '+34 938 869 733' }
     };
     
-    // NOTA: La variable "bannerLinks" ahora viene del fichero "datos_banners.js",
-    // que se carga antes que este. Por eso podemos usarla directamente.
+    // NOTA: La variable "bannerLinks" ahora viene del fichero "datos_banners.js"
 
     // --- Elementos del DOM ---
     const generarBtn = document.getElementById('generar-btn');
@@ -45,21 +44,18 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         return phoneNumber;
     }
-
-    // ✅ INICIO DE CAMBIO: Nueva función para convertir texto a "Title Case"
+    
     function toTitleCase(str) {
         if (!str) return '';
-        // Convierte todo a minúsculas, divide por palabras, y pone la primera letra de cada una en mayúscula
         return str.toLowerCase().split(' ').map(function(word) {
             return word.charAt(0).toUpperCase() + word.slice(1);
         }).join(' ');
     }
-    // ✅ FIN DE CAMBIO
 
     function updateSignature() {
-        // ✅ CAMBIO: Usamos la función de formateo al generar la firma para asegurar la consistencia
         const nombreVal = toTitleCase(formInputs.nombre.value.trim());
-        const cargoVal = formInputs.cargo.value.trim();
+        // ✅ MEJORA: Aplicado el formato también al cargo
+        const cargoVal = toTitleCase(formInputs.cargo.value.trim());
         const tefVal = formInputs.tef.value.trim();
         const sedeVal = formInputs.sede.value;
         
@@ -84,7 +80,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (formInputs.division && signatureOutputs.banner && signatureOutputs.bannerLink) {
             const divisionVal = formInputs.division.value; 
-            
             let bannerFilename = 'banner_actual.png';
             let linkKey = 'general'; 
 
@@ -94,33 +89,65 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             signatureOutputs.banner.src = `https://raw.githubusercontent.com/Firma-Es-Christeyns/Generador-Firmas/main/img/banner/${bannerFilename}`;
-            
             const defaultUrl = bannerLinks['general'] || 'https://www.christeyns.com/es-es/';
             signatureOutputs.bannerLink.href = bannerLinks[linkKey] || defaultUrl;
         }
     }
+    
+    function fallbackCopyHTML(elementToCopy) {
+        const range = document.createRange();
+        range.selectNode(elementToCopy);
+        window.getSelection().removeAllRanges();
+        window.getSelection().addRange(range);
+        
+        let success = false;
+        try {
+            success = document.execCommand('copy');
+        } catch (err) {
+            console.error('Fallback copy failed', err);
+        }
+    
+        window.getSelection().removeAllRanges();
+        return success;
+    }
+
+    // ✅ MEJORA: Función centralizada para mostrar el feedback del botón copiado
+    function showCopiedFeedback() {
+        copyBtn.textContent = '¡Copiado!';
+        copyBtn.classList.add('copied'); // Añade la clase para el fondo verde
+        setTimeout(() => {
+            copyBtn.textContent = 'Copiar Firma';
+            copyBtn.classList.remove('copied'); // Quita la clase del fondo verde
+        }, 5000); // El botón se mantiene así durante 5 segundos
+    }
 
     // --- Event Listeners ---
     if (generarBtn) {
-        // ✅ INICIO DE CAMBIO: Listener para formatear el nombre en tiempo real
         if (formInputs.nombre) {
             formInputs.nombre.addEventListener('input', function(e) {
-                // Guarda la posición del cursor para que no salte al final
                 const start = e.target.selectionStart;
                 const end = e.target.selectionEnd;
-                // Aplica el formato
                 e.target.value = toTitleCase(e.target.value);
-                // Restaura la posición del cursor
                 e.target.setSelectionRange(start, end);
             });
         }
-        // ✅ FIN DE CAMBIO
+        
+        // ✅ MEJORA: Listener para formatear el cargo en tiempo real
+        if (formInputs.cargo) {
+            formInputs.cargo.addEventListener('input', function(e) {
+                const start = e.target.selectionStart;
+                const end = e.target.selectionEnd;
+                e.target.value = toTitleCase(e.target.value);
+                e.target.setSelectionRange(start, end);
+            });
+        }
 
         if (formInputs.tef) {
             formInputs.tef.addEventListener('input', function (e) {
                 e.target.value = e.target.value.replace(/\D/g, '');
             });
         }
+
         generarBtn.addEventListener('click', function() {
             if (!formInputs.nombre.value.trim() || !formInputs.cargo.value.trim() || !formInputs.sede.value) {
                 alert('Por favor, rellena todos los campos obligatorios: Nombre, Cargo y Sede.');
@@ -133,6 +160,7 @@ document.addEventListener('DOMContentLoaded', function() {
             generadoSpan.style.fontWeight = 'bold';
             generadoSpan.style.marginLeft = '10px';
         });
+
         Object.values(formInputs).forEach(input => {
             if (input) { 
                 input.addEventListener('input', () => {
@@ -146,44 +174,28 @@ document.addEventListener('DOMContentLoaded', function() {
     if (copyBtn && firmaContainer) {
         copyBtn.addEventListener('click', function() {
             if (copyBtn.disabled) return;
-            try {
+            
+            if (navigator.clipboard && navigator.clipboard.write) {
                 const firmaHTML = firmaContainer.innerHTML;
                 const blob = new Blob([firmaHTML], { type: 'text/html' });
                 const clipboardItem = new ClipboardItem({ 'text/html': blob });
+
                 navigator.clipboard.write([clipboardItem]).then(() => {
-                    copyBtn.textContent = '¡Copiado!';
-                    copyBtn.classList.add('copied');
-                    setTimeout(() => {
-                        copyBtn.textContent = 'Copiar Firma';
-                        copyBtn.classList.remove('copied');
-                    }, 2000);
+                    showCopiedFeedback();
                 }).catch(err => {
-                    fallbackCopy(firmaContainer.innerHTML); 
+                    if (fallbackCopyHTML(firmaContainer)) {
+                        showCopiedFeedback();
+                    } else {
+                        alert('Error al copiar. Por favor, selecciona la firma manualmente y cópiala.');
+                    }
                 });
-            } catch (err) {
-                fallbackCopy(firmaContainer.innerHTML);
+            } else {
+                if (fallbackCopyHTML(firmaContainer)) {
+                    showCopiedFeedback();
+                } else {
+                    alert('Error al copiar. Por favor, selecciona la firma manualmente y cópiala.');
+                }
             }
         });
-    }
-    
-    function fallbackCopy(textToCopy) {
-        const textArea = document.createElement("textarea");
-        textArea.value = textToCopy;
-        textArea.style.position="fixed"; textArea.style.top = "-9999px";
-        document.body.appendChild(textArea);
-        textArea.focus();
-        textArea.select();
-        try {
-            document.execCommand('copy');
-            copyBtn.textContent = '¡Copiado!';
-            copyBtn.classList.add('copied');
-            setTimeout(() => {
-                copyBtn.textContent = 'Copiar Firma';
-                copyBtn.classList.remove('copied');
-            }, 2000);
-        } catch (err) {
-            console.error('Fallback copy failed', err);
-        }
-        document.body.removeChild(textArea);
     }
 });
