@@ -71,6 +71,7 @@ body {
     align-items: center;
     gap: 20px;
     margin-top: 20px;
+    margin-right: 26px;
 }
 
 .form-top-row, .form-middle-row {
