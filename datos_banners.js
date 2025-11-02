@@ -3,10 +3,11 @@
 
 const bannerLinks = {
   "general": "https://www.christeyns.com/es-es/article/christeyns-hygienalia-servicio-higiene-integral-shi/",
-  "laundry": "https://www.christeyns.com/es-es/article/higiene-lavanderias-hospitalaria-cocinas/",
+  "laundry": "https://www.christeyns.com/es-es/soluciones/ahorro-de-agua/hydro/",
   "ph": "https://www.christeyns.com/es-es/article/christeyns-hygienalia-servicio-higiene-integral-shi/",
   "food": "https://www.christeyns.com/es-es/article/christeyns-hygienalia-servicio-higiene-integral-shi/"
 };
+
 
 
 
