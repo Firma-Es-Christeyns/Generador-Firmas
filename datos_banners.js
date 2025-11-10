@@ -2,11 +2,12 @@
 // El equipo de Marketing solo debe editar las URLs que están dentro de las comillas.
 
 const bannerLinks = {
-  "general": "https://www.christeyns.com/es-es/article/christeyns-hygienalia-servicio-higiene-integral-shi/",
+  "general": "https://www.christeyns.com/es-es/SHI/",
   "laundry": "https://www.christeyns.com/es-es/soluciones/ahorro-de-agua/hydro/",
-  "ph": "https://www.christeyns.com/es-es/article/christeyns-hygienalia-servicio-higiene-integral-shi/",
-  "food": "https://www.christeyns.com/es-es/article/christeyns-hygienalia-servicio-higiene-integral-shi/"
+  "ph": "https://www.christeyns.com/es-es/SHI/",
+  "food": "https://www.christeyns.com/es-es/SHI/"
 };
+
 
 
 
