@@ -4,9 +4,10 @@
 const bannerLinks = {
   "general": "https://www.christeyns.com/es-es/",
   "laundry": "https://www.christeyns.com/es-es/",
-  "ph": "https://www.christeyns.com/es-es/",
+  "ph": "https://www.christeyns.com/es-es/SHI/",
   "food": "https://www.christeyns.com/es-es/"
 };
+
 
 
 
