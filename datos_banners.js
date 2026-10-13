@@ -5,7 +5,7 @@ const bannerLinks = {
   "general": "https://www.christeyns.com/es-es/",
   "laundry": "https://www.christeyns.com/es-es/article/visita-a-christeyns-expo-detergo-2026/",
   "ph": "https://www.christeyns.com/es-es/SHI/",
-  "food": "https://www.christeyns.com/es-es/article/christeyns-alimentaria-foodtech-2026/"
+  "food": "www.christeyns.com/es-es/secuenciacion-genomica-higiene/"
 };
 
 
