@@ -3,7 +3,7 @@
 
 const bannerLinks = {
   "general": "https://www.christeyns.com/es-es/",
-  "laundry": "https://www.christeyns.com/es-es/article/visita-a-christeyns-expo-detergo-2026/",
+  "laundry": "https://www.christeyns.com/es-es/soluciones/ahorro-de-agua/hydro/",
   "ph": "https://www.christeyns.com/es-es/SHI/",
   "food": "www.christeyns.com/es-es/secuenciacion-genomica-higiene/"
 };
