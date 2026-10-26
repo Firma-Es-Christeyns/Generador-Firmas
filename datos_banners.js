@@ -3,7 +3,7 @@
 
 const bannerLinks = {
   "general": "https://www.christeyns.com/es-es/",
-  "laundry": "https://www.christeyns.com/es-es/soluciones/ahorro-de-agua/hydro/",
+  "laundry": "https://www.christeyns.com/es-es/sectores/cuidado-profesional-de-textiles/lau-equipos-energia-2026/",
   "ph": "https://www.christeyns.com/es-es/SHI/",
   "food": "www.christeyns.com/es-es/secuenciacion-genomica-higiene/"
 };
